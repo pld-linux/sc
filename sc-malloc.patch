@@ -1,0 +1,13 @@
+--- sc-7.16/xmalloc.c.orig	2010-02-04 23:48:47.780444009 +0100
++++ sc-7.16/xmalloc.c	2010-02-04 23:50:36.827915054 +0100
+@@ -6,8 +6,8 @@
+ #include <curses.h>
+ #include "sc.h"
+ 
+-extern char	*malloc();
+-extern char	*realloc();
++extern void	*malloc();
++extern void	*realloc();
+ extern void	free();
+ void		fatal();
+ 
