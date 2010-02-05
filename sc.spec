@@ -4,7 +4,7 @@ Name:		sc
 Version:	7.16
 Release:	1.0
 License:	Public Domain
-Group:		Applications/Terminal
+Group:		Applications/Math
 Source0:	http://www.ibiblio.org/pub/Linux/apps/financial/spreadsheet/%{name}-%{version}.tar.gz
 # Source0-md5:	1db636e9b2dc7cd73c40aeece6852d47
 Patch0:		%{name}-malloc.patch
