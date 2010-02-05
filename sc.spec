@@ -9,6 +9,7 @@ Source0:	http://www.ibiblio.org/pub/Linux/apps/financial/spreadsheet/%{name}-%{v
 # Source0-md5:	1db636e9b2dc7cd73c40aeece6852d47
 Patch0:		%{name}-malloc.patch
 URL:		http://www.ibiblio.org/pub/Linux/apps/financial/spreadsheet/
+BuildRequires:	bison
 BuildRequires:	ncurses-devel >= 5.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
