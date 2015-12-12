@@ -1,0 +1,74 @@
+--- sc-7.16/sc.c.orig	2014-11-05 16:27:19.470812738 +0000
++++ sc-7.16/sc.c	2014-11-05 16:29:14.753177024 +0000
+@@ -511,7 +511,7 @@
+ 		    break;
+ 	    }
+ 	}
+-	if (redraw) printf(redraw);
++	if (redraw) printf("%s", redraw);
+ 	exit (0);
+     }
+ 
+--- sc-7.16/sc.h.orig	2014-11-05 16:47:04.184019270 +0000
++++ sc-7.16/sc.h	2014-11-05 16:48:20.217944078 +0000
+@@ -41,9 +41,9 @@
+ #define COLFORMATS	 10	/* Number of custom column formats */
+ #define DELBUFSIZE	 40	/* Number of named buffers + 4 */
+ #ifdef PSC
+-# define error(msg)	fprintf(stderr, msg);
++# define error(format, msg...) fprintf(stderr, format, ## msg);
+ #else
+-# define error isatty(fileno(stdout)) && !move(1,0) && !clrtoeol() && printw
++# define error(format, msg...) (void)(isatty(fileno(stdout)) && !move(1,0) && !clrtoeol() && printw(format, ## msg))
+ #endif
+ #define	FBUFLEN	1024	/* buffer size for a single field */
+ #define	PATHLEN	1024	/* maximum path length */
+--- sc-7.16/vmtbl.c.orig	2014-11-05 16:50:49.449833798 +0000
++++ sc-7.16/vmtbl.c	2014-11-05 16:52:54.254068948 +0000
+@@ -56,7 +56,7 @@
+     newptr = (type *)scxrealloc((char *)oldptr, \
+ 	    (unsigned)(nelem * sizeof(type))); \
+     if (newptr == (type *)NULL) { \
+-	error(msg); \
++	error("%s", msg); \
+ 	return (FALSE); \
+     } \
+     oldptr = newptr /* wait incase we can't alloc */
+@@ -118,7 +118,7 @@
+     if ((rowcol == GROWCOL) || (rowcol == GROWBOTH)) {
+ 	if ((rowcol == GROWCOL) && ((maxcols == ABSMAXCOLS) ||
+ 		(topcol >= ABSMAXCOLS))) {
+-	    error(nowider);
++	    error("%s", nowider);
+ 	    return (FALSE);
+ 	}
+ 
+@@ -173,7 +173,7 @@
+ 	for (i = 0; i < maxrows; i++) {
+ 	    if ((tbl[i] = (struct ent **)scxrealloc((char *)tbl[i],
+ 		(unsigned)(newcols * sizeof(struct ent **)))) == (struct ent **)0) {
+-	    error(nowider);
++	    error("%s", nowider);
+ 	    return(FALSE);
+ 	    }
+ 	for (nullit = ATBL(tbl, i, maxcols), cnt = 0;
+@@ -191,7 +191,7 @@
+     for (; i < newrows; i++) {
+ 	if ((tbl[i] = (struct ent **)scxmalloc((unsigned)(newcols *
+ 		sizeof(struct ent **)))) == (struct ent **)0) {
+-	    error(nowider);
++	    error("%s", nowider);
+ 	    return(FALSE);
+ 	}
+ 	for (nullit = tbl[i], cnt = 0; cnt < newcols; cnt++, nullit++)
+--- sc-7.16/gram.y.orig	2014-11-05 17:03:00.427505246 +0000
++++ sc-7.16/gram.y	2014-11-05 17:03:31.097072485 +0000
+@@ -1010,7 +1010,7 @@
+ 	|	S_PLUGOUT STRING '=' STRING
+ 					{ addplugin($2, $4, 'w'); } 
+ 	|       PLUGIN			{ *line = '|';
+-					  sprintf(line + 1, $1);
++					  sprintf(line + 1, "%s", $1);
+ 					  readfile(line, 0);
+ 					  scxfree($1); }
+ 	|	/* nothing */
