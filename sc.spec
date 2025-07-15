@@ -35,8 +35,8 @@ tesktowej, często bazując na wartościach innych komórek (formuła).
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
+%patch -P0 -p1
+%patch -P1 -p1
 
 %build
 %{__make} CFLAGS="%{rpmcppflags} %{rpmcflags} -I/usr/include/ncurses -DSYSV3" \
